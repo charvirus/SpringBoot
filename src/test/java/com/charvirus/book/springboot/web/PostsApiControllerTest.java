@@ -1,37 +1,40 @@
-package com.charvirus.book.springboot.domain.posts;
+package com.charvirus.book.springboot.web;
+
+import com.charvirus.book.springboot.domain.posts.Posts;
+import com.charvirus.book.springboot.domain.posts.PostsRepository;
+import com.charvirus.book.springboot.web.dto.PostsSaveRequestDto;
 
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-
-public class PostsRepositoryTest {
+public class PostsApiControllerTest {
     @Autowired
     PostsRepository postsRepository;
 
-/**
- * JUnit에서 단위 테스트가 끝날 때마다 수행되는 메소드를 지정
- * */
     @After
-    public void cleanup() {
+    public void cleanUp(){
         postsRepository.deleteAll();
     }
 
     @Test
-    public void 게시글저장_불러오기() {
+    public void 게시글저장_불러오기(){
         //given
         String title = "테스트 게시글";
-        String content = "테스트 내용";
+        String content = "테스트 본문";
 
         postsRepository.save(Posts.builder()
                 .title(title)
@@ -46,6 +49,5 @@ public class PostsRepositoryTest {
         Posts posts = postsList.get(0);
         assertThat(posts.getTitle()).isEqualTo(title);
         assertThat(posts.getContent()).isEqualTo(content);
-
     }
 }
