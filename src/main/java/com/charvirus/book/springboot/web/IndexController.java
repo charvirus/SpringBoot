@@ -19,6 +19,13 @@ public class IndexController {
         return "index";
     }
 
+    @GetMapping("/posts/{id}")
+    public String postsView(@PathVariable Long id,Model model){
+        PostsResponseDto dto = postsService.findById(id);
+        model.addAttribute("posts-view",dto);
+        return "posts-view";
+    }
+
     @GetMapping("/posts/save")
     public String postsSave(){
         return "posts-save";
@@ -27,7 +34,7 @@ public class IndexController {
     @GetMapping("/posts/update/{id}")
     public String postsUpdate(@PathVariable Long id, Model model){
         PostsResponseDto dto = postsService.findById(id);
-        model.addAttribute("post",dto);
+        model.addAttribute("posts-update",dto);
         return "posts-update";
     }
 }
