@@ -25,7 +25,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        OAuth2UserService delegate = new DefaultOAuth2UserService();
+        OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
@@ -36,15 +36,16 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         OAuthAttributes attributes = OAuthAttributes
                 .of(registrationId,userNameAttributeName, oAuth2User.getAttributes());
-
+        System.out.println(attributes.getEmail());
+        System.out.println(attributes.getPicture());
         User user = saveOrUpdate(attributes);
         httpSession.setAttribute("user",new SessionUser(user));
-
+        // 세션 DTO를 따로 만들어서 주는 이유는 user는 엔티티여서 직렬화를 해줘야하기 때문
 
         return new DefaultOAuth2User(Collections.singleton(
-                new SimpleGrantedAuthority(user.getRoleKey())),
-                attributes.getAttributes(),
-                attributes.getNameAttributeKey());
+            new SimpleGrantedAuthority(user.getRoleKey())),
+            attributes.getAttributes(),
+            attributes.getNameAttributeKey());
     }
 
     private User saveOrUpdate(OAuthAttributes attributes) {
