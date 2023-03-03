@@ -57,7 +57,7 @@ public class OAuthAttributes {
                 .name(name)
                 .email(email)
                 .picture(picture)
-                .role(Role.GUEST)
+                .role(Role.USER)    // 원래는 GUEST이지만 로그인 후 권한 변경을 해야하는 번거로움 있어서 USER로 변경
                 .build();
     }
 }

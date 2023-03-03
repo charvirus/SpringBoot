@@ -36,8 +36,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         OAuthAttributes attributes = OAuthAttributes
                 .of(registrationId,userNameAttributeName, oAuth2User.getAttributes());
-        System.out.println(attributes.getEmail());
-        System.out.println(attributes.getPicture());
+
         User user = saveOrUpdate(attributes);
         httpSession.setAttribute("user",new SessionUser(user));
         // 세션 DTO를 따로 만들어서 주는 이유는 user는 엔티티여서 직렬화를 해줘야하기 때문
